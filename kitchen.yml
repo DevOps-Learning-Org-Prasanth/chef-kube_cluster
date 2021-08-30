@@ -1,0 +1,33 @@
+---
+driver:
+  name: dokken
+  chef_version: 17.1
+  chef_license: accept-no-persist
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  attributes:
+    apt:
+      confd:
+        install_recommends: false
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7
+    driver:
+      image: dokken/centos-7:latest
+      pid_one_command: /usr/lib/systemd/systemd
+
+suites:
+  - name: master
+    provisioner:
+      policyfile_path: ./policies/master_node.rb
+
+  - name: worker
+    provisioner:
+      policyfile_path: ./policies/worker_node.rb

@@ -1,0 +1,24 @@
+name: Chef-push
+on:
+  push:
+    branch: '!master'
+
+jobs:
+  test:
+    name: Kitchen test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      - name: Install pre-requisites
+        run: |
+          sudo apt update -y
+          sudo apt upgrade -y
+          sudo apt install docker
+          sudo apt install chef
+      
+      - name: Kitchen test
+        run: |
+          kitchen test
+
