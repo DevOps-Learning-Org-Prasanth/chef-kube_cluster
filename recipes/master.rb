@@ -4,6 +4,7 @@ include_recipe 'kube_cluster::common_installation'
 
 bash 'start_cluster' do
   code <<-EOH
+    swapoff -a
     kubeadm init
     mkdir -p $HOME/.kube
     cp -i /etc/kubernetes/admin.conf $HOME/.kube/config

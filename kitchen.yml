@@ -1,27 +1,24 @@
 ---
 driver:
-  name: dokken
-  chef_version: 17.1
-  chef_license: accept-no-persist
+  name: vagrant
 
-transport:
-  name: dokken
 
 provisioner:
-  name: dokken
-  attributes:
-    apt:
-      confd:
-        install_recommends: false
+  name: chef_zero
+  product_name: chef
+  product_version: 17.1
+  install_strategy: always
+  deprications_as_errors: true
+  client_rb:
+    chef_licenses: accept
 
 verifier:
   name: inspec
 
 platforms:
   - name: centos-7
-    driver:
-      image: dokken/centos-7:latest
-      pid_one_command: /usr/lib/systemd/systemd
+    driver_config:
+      box: bento/centos-7.2
 
 suites:
   - name: master
