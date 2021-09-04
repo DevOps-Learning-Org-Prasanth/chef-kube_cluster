@@ -21,22 +21,33 @@ reboot 'reboot_now' do
   reason 'Need a reboot after selinux is disabled'
 end
 
-firewall 'default' do
-  action :install
+# firewall 'default' do
+  # action :install
+# end
+# 
+# firewall_rule 'kube_settings' do
+  # protocol :tcp
+  # port node['kube_cluster']['ports']
+  # command :allow
+# end
+
+bash 'kube_settings' do
+  for port in node['kube_cluster']['ports']
+    code <<-EOH
+      firewall-cmd --permanent --add-port=#{port}/tcp
+    EOH
+  end
+  code <<-EOH
+    modprobe br_netfilter
+    echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+    swapoff -a
+  EOH
 end
 
-firewall_rule 'kube_settings' do
-  protocol :tcp
-  port node['kube_cluster']['ports']
-  command :allow
-end
-
-package 'docker' do
-  action :install
-end
-
-package 'kubeadm' do
-  action :install
+bash 'install_pkgs' do
+  code <<-EOH
+    sudo yum install kubeadm docker -y
+  EOH
 end
 
 service 'docker' do
@@ -44,5 +55,5 @@ service 'docker' do
 end
 
 service 'kubelet' do
-  action [:enable, :start]
+  action :enable
 end

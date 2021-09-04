@@ -18,6 +18,17 @@ reference: https://www.tecmint.com/install-kubernetes-cluster-on-centos-7/
 2. Set Firewall rules on port
     - Different for master and worker nodes
     - https://supermarket.chef.io/cookbooks/firewall
+    ```
+        firewall-cmd --permanent --add-port=6443/tcp
+        firewall-cmd --permanent --add-port=2379-2380/tcp
+        firewall-cmd --permanent --add-port=10250/tcp
+        firewall-cmd --permanent --add-port=10251/tcp
+        firewall-cmd --permanent --add-port=10252/tcp
+        firewall-cmd --permanent --add-port=10255/tcp
+        firewall-cmd –reload
+        modprobe br_netfilter
+        echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+    ```
 3. Setup kubernetes yum pkg repo: template file
 4. Install packages kubeadm,docker
 5. enable and start the following services

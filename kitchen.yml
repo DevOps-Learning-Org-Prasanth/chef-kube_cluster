@@ -1,7 +1,9 @@
 ---
 driver:
   name: vagrant
-
+  customize:
+    cpus: 2
+    memory: 2024
 
 provisioner:
   name: chef_zero
@@ -18,13 +20,19 @@ verifier:
 platforms:
   - name: centos-7
     driver_config:
-      box: bento/centos-7.2
+      box: bento/centos-7.4
 
 suites:
   - name: master
     provisioner:
       policyfile_path: ./policies/master_node.rb
+    verifier:
+      inspec_tests:
+        - test/integration/default
 
   - name: worker
     provisioner:
       policyfile_path: ./policies/worker_node.rb
+    verifier:
+      inspec_tests:
+        - test/integration/default

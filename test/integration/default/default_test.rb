@@ -11,6 +11,18 @@ unless os.windows?
 end
 
 # This is an example test, replace it with your own test.
-describe port(80), :skip do
+describe port(6443), :skip do
   it { should_not be_listening }
+end
+
+describe service('kubelet') do
+  it { should be_installed }
+  it { should be_enabled }
+  # it { should be_running }
+end
+
+describe service('docker') do
+  it { should be_installed }
+  it { should be_enabled }
+  it { should be_running }
 end
