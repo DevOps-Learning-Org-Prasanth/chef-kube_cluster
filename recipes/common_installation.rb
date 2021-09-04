@@ -4,6 +4,11 @@
 #
 # Copyright:: 2021, Prasanth, All Rights Reserved.
 
+# Add kubernetes repo
+template '/etc/yum.repos.d/kubernetes.repo' do
+  source 'kubernetes.repo.erb'
+end
+
 # Disable selinux
 selinux_state 'disable' do
   action :disabled
@@ -11,26 +16,38 @@ selinux_state 'disable' do
 end
 
 reboot 'reboot_now' do
+  not_if 'getenforce | grep -i "disabled"'
   action :reboot_now
   reason 'Need a reboot after selinux is disabled'
 end
 
-firewall_rule 'kube_settings' do
-  protocol :tcp
-  port node['kube_cluster']['ports']
-  command :allow
+# firewall 'default' do
+  # action :install
+# end
+# 
+# firewall_rule 'kube_settings' do
+  # protocol :tcp
+  # port node['kube_cluster']['ports']
+  # command :allow
+# end
+
+bash 'kube_settings' do
+  for port in node['kube_cluster']['ports']
+    code <<-EOH
+      firewall-cmd --permanent --add-port=#{port}/tcp
+    EOH
+  end
+  code <<-EOH
+    modprobe br_netfilter
+    echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+    swapoff -a
+  EOH
 end
 
-template '/etc/yum.repos.d/kubernetes.repo' do
-  source 'kubernetes.repo.erb'
-end
-
-package 'kubeadm' do
-  action :install
-end
-
-package 'docker' do
-  action :install
+bash 'install_pkgs' do
+  code <<-EOH
+    sudo yum install kubeadm docker -y
+  EOH
 end
 
 service 'docker' do
@@ -38,17 +55,5 @@ service 'docker' do
 end
 
 service 'kubelet' do
-  action [:enable, :start]
-end
-
-bash 'disable_swap' do
-  code <<-EOH
-    swapoff -a
-    kubeadm init
-    mkdir -p $HOME/.kube
-    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    chown $(id -u):$(id -g) $HOME/.kube/config
-    export kubever=$(kubectl version | base64 | tr -d '\n')
-    kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-    EOH
+  action :enable
 end

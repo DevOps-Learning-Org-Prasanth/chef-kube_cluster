@@ -17,8 +17,3 @@ jobs:
           sudo apt upgrade -y
           sudo apt install docker
           sudo apt install chef
-      
-      - name: Kitchen test
-        run: |
-          kitchen test
-
