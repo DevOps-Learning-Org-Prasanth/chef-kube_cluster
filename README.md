@@ -50,4 +50,5 @@ We will need two policies one for master node and another for worker node
 ### actions
 - Add chef_pem key to secrets.
 - create a folder with knife config.rb
-- apply knife cookbook upload
+- apply knife cookbook upload - to aupload cookbook to supermarket
+- Create and push policies to chef server
