@@ -22,17 +22,17 @@ reboot 'reboot_now' do
 end
 
 # firewall 'default' do
-  # action :install
+# action :install
 # end
-# 
+#
 # firewall_rule 'kube_settings' do
-  # protocol :tcp
-  # port node['kube_cluster']['ports']
-  # command :allow
+# protocol :tcp
+# port node['kube_cluster']['ports']
+# command :allow
 # end
 
 bash 'kube_settings' do
-  for port in node['kube_cluster']['ports']
+  node['kube_cluster']['ports'].each do |port|
     code <<-EOH
       firewall-cmd --permanent --add-port=#{port}/tcp
     EOH

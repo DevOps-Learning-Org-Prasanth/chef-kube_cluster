@@ -1,7 +1,7 @@
 name: Chef-push
 on:
-  push:
-    branch: '!master'
+  pull_request:
+    branch: 'master'
 
 jobs:
   test:
@@ -15,5 +15,4 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt upgrade -y
-          sudo apt install docker
           sudo apt install chef
