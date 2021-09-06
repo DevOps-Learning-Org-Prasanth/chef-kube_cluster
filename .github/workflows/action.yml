@@ -10,3 +10,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+    # Knife configure
+      - Copy rsa key to pem file under .chef(pem file name is fixed)
+    # Knife supermarket upload
+      - use knife command to upload the cookbook
+    # Knife policies upload
