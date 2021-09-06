@@ -1,19 +1,13 @@
 name: Chef-push
 on:
   push:
-    branch: '!master'
+    branch: 'master'
 
 jobs:
   test:
-    name: Kitchen test
+    name: Upload Cookbook
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      
-      - name: Install pre-requisites
-        run: |
-          sudo apt update -y
-          sudo apt upgrade -y
-          sudo apt install docker
-          sudo apt install chef
+          
