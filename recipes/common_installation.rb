@@ -21,18 +21,8 @@ reboot 'reboot_now' do
   reason 'Need a reboot after selinux is disabled'
 end
 
-# firewall 'default' do
-  # action :install
-# end
-# 
-# firewall_rule 'kube_settings' do
-  # protocol :tcp
-  # port node['kube_cluster']['ports']
-  # command :allow
-# end
-
 bash 'kube_settings' do
-  for port in node['kube_cluster']['ports']
+  node['kube_cluster']['ports'].each do |port|
     code <<-EOH
       firewall-cmd --permanent --add-port=#{port}/tcp
     EOH
