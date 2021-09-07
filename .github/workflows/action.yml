@@ -1,8 +1,6 @@
 name: Cookbook Upload
 on:
-  push:
-    branch: 
-      - master
+  workflow_dispatch:
 
 jobs:
   Upload_Cookbook:
