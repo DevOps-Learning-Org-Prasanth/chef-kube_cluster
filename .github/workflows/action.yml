@@ -1,7 +1,7 @@
 name: Chef-push
 on:
   push:
-    branch: '!master'
+    branch: 'master'
 
 jobs:
   test:
@@ -19,11 +19,17 @@ jobs:
         run: |
           echo "${{ secrets.CHEF_PEM_KEY }}" > .chef/prasanth155518.pem
       
-      - name: Knife test
-        id: test
+      - name: Upload cookbook to supermarket
+        id: cookbook_upload
         run: |
-          knife cookbook list
-
-    # Knife supermarket upload
-      # - use knife command to upload the cookbook
-    # Knife policies upload
+          cookbook="`echo ${{ github.event.repository.name }} | sed 's/chef-//'
+          knife supermarket share $cookbook "Utilities" 
+      
+      - name: Upload policies to chef server
+        id: policy_upload
+        run: |
+          for i in $(ls policies*/artifacts/pulse_*.tgz) ; do chef push-archive kubernetes $i; done
+      - name: List policies
+        id: policy_list
+        run: |
+          chef show-policy | grep "_node"
