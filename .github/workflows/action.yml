@@ -30,10 +30,10 @@ jobs:
         continue-on-error: true
         run: |
           mkdir policies/artifacts
-          for i in $(ls policies/*.rb) ; do chef install $i; chef export $i policies/artifacts -a ; done
+          for i in $(ls policies/*.rb) ; do chef install $i --chef-license accept ; chef export $i policies/artifacts -a --chef-license accept; done
           for i in $(ls policies/artifacts/*.tgz) ; do chef push-archive kubernetes $i; done
         
       - name: List policies
         id: policy_list
         run: |
-          chef show-policy | grep "_node"
+          chef show-policy
