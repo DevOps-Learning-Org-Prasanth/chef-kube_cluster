@@ -1,4 +1,4 @@
-name: Chef-push
+name: Cookbook Upload
 on:
   push:
     branch: 
