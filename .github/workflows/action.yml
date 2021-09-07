@@ -23,7 +23,7 @@ jobs:
       - name: Upload cookbook to supermarket
         id: cookbook_upload
         run: |
-          cookbook="`echo ${{ github.event.repository.name }} | sed 's/chef-//'"
+          cookbook="`echo ${{ github.event.repository.name }} | sed 's/chef-//'`"
           knife supermarket share $cookbook "Utilities" 
       
       - name: Upload policies to chef server
