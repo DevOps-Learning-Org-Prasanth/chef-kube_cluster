@@ -17,7 +17,7 @@ jobs:
       - name: Get private Key
         id: pem_key
         run: |
-          echo "${{ secrets.CHEF_PEM_KEY }}" > .chef/validator.pem
+          echo "${{ secrets.CHEF_PEM_KEY }}" > .chef/prasanth155518.pem
       
       - name: Knife test
         id: test
