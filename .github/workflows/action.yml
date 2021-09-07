@@ -20,14 +20,18 @@ jobs:
       
       - name: Upload cookbook to supermarket
         id: cookbook_upload
+        continue-on-error: true
         run: |
           cookbook="`echo ${{ github.event.repository.name }} | sed 's/chef-//'`"
           knife supermarket share $cookbook "Utilities" 
       
       - name: Upload policies to chef server
         id: policy_upload
+        continue-on-error: true
         run: |
-          for i in $(ls policies*/artifacts/pulse_*.tgz) ; do chef push-archive kubernetes $i; done
+          mkdir policies/artifacts
+          for i in $(ls policies/*.rb) ; do chef install $i; chef export $i policies/artifacts -a ; done
+          for i in $(ls policies/artifacts/*.tgz) ; do chef push-archive kubernetes $i; done
         
       - name: List policies
         id: policy_list
