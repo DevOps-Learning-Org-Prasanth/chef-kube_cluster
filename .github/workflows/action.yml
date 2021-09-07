@@ -36,4 +36,4 @@ jobs:
       - name: List policies
         id: policy_list
         run: |
-          chef show-policy
+          chef show-policy --chef-license accept
