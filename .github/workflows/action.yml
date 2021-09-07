@@ -11,8 +11,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       
-     - name: Install Chef
-       uses: actionshub/chef-install@master
+      - name: Install Chef
+        uses: actionshub/chef-install@master
      
       - name: Get private Key
         id: pem_key
