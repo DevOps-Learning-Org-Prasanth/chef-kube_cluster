@@ -1,18 +1,37 @@
 name: Chef-push
 on:
-  pull_request:
-    branch: 'master'
+  push:
+    branch: 
+      - master
 
 jobs:
-  test:
-    name: Kitchen test
+  Upload_Cookbook:
+    name: Upload Cookbook and policies
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
       
-      - name: Install pre-requisites
+      - name: Install Chef
+        uses: actionshub/chef-install@main
+  
+      - name: Get private Key
+        id: pem_key
         run: |
-          sudo apt update -y
-          sudo apt upgrade -y
-          sudo apt install chef
+          echo "${{ secrets.CHEF_PEM_KEY }}" > .chef/prasanth155518.pem
+      
+      - name: Upload cookbook to supermarket
+        id: cookbook_upload
+        run: |
+          cookbook="`echo ${{ github.event.repository.name }} | sed 's/chef-//'`"
+          knife supermarket share $cookbook "Utilities" 
+      
+      - name: Upload policies to chef server
+        id: policy_upload
+        run: |
+          for i in $(ls policies*/artifacts/pulse_*.tgz) ; do chef push-archive kubernetes $i; done
+        
+      - name: List policies
+        id: policy_list
+        run: |
+          chef show-policy | grep "_node"

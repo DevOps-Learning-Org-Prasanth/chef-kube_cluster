@@ -48,4 +48,7 @@ We will need two policies one for master node and another for worker node
 -test if the number of lines with `NotReady` is zero or not using grep??. Op of kubelet get nodes.  
 
 ### actions
-TODO
+- [x] Add chef_pem key to secrets.
+- create a folder with knife config.rb
+- apply knife cookbook upload - to upload cookbook to supermarket
+- Create and push policies to chef server
