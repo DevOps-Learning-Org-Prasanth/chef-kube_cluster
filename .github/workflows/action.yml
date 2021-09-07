@@ -1,7 +1,8 @@
 name: Chef-push
 on:
   push:
-    branch: 'master'
+    branch: 
+      - master
 
 jobs:
   test:
