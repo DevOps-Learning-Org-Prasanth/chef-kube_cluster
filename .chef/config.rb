@@ -3,7 +3,7 @@ current_dir = File.dirname(__FILE__)
 log_level                :info
 log_location             STDOUT
 node_name                "gaActions"
-client_key               "#{current_dir}/.pem"
-chef_server_url          ""
+client_key               "#{current_dir}/validator.pem"
+chef_server_url          "https://api.chef.io/organizations/chef_training155"
 cookbook_path            ["../"]
 knife[:editor] = "/usr/bin/vim"

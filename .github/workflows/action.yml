@@ -1,7 +1,7 @@
 name: Chef-push
 on:
   push:
-    branch: 'master'
+    branch: '!master'
 
 jobs:
   test:
@@ -10,8 +10,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-    # Knife configure
-      - Copy rsa key to pem file under .chef(pem file name is fixed)
+      
+     - name: Install Chef
+       uses: actionshub/chef-install@master
+     
+      - name: Get private Key
+        id: pem_key
+        run: |
+          echo ${{ secrets.CHEF_PEM_KEY }} > .chef/validator.pem
+      
+      - name: Knife test
+        id: test
+        run: |
+          knife cookbook list
+
     # Knife supermarket upload
-      - use knife command to upload the cookbook
+      # - use knife command to upload the cookbook
     # Knife policies upload
